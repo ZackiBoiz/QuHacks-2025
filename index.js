@@ -84,12 +84,14 @@ server.listen(PORT, async () => {
 
 const users = {};
 const points = {};
-const update_time = 20;
+const update_time = 50;
 const max_name = 24;
 const max_chat = 256;
 io.on("connection", async (socket) => {
+    console.log(`${socket.id} connected to socket.`);
     var user = null;
     var disconnected = false;
+    
     socket.on("join", async (data) => {
         if (user || disconnected) return;
 

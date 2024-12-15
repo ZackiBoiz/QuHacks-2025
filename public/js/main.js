@@ -170,6 +170,8 @@
 
     color_picker.addEventListener("input", () => {
         color = color_picker.value;
+        using_eraser = false;
+        eraser.src = "/assets/eraser.png";
     });
     width_slider.addEventListener("input", () => {
         point_radius = width_slider.value;
