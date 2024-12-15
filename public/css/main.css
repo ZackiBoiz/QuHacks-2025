@@ -11,7 +11,8 @@
     bottom: 0;
     width: 7vw;
     height: 5vw;
-    border: 0.2vw black solid;
+    border: 0.25vw black solid;
+    border-radius: 0.5vw;
 }
 
 #eraser {
@@ -40,19 +41,20 @@
     float: left;
     text-align: center;
     width: fit-content;
-    height: 4vw;
+    height: 3vw;
     padding: 0 1vw 0 1vw;
     margin: 1vw 0.2vw 1vw 1vw;
-    border: 0.5vw black solid;
-    border-radius: 1vw;
+    border: 0.25vw black solid;
+    border-radius: 0.5vw;
     background-color: #4eaddb;
+    font-size: 1vw;
     cursor: pointer;
 }
 
 #chat-box {
     position: absolute;
     left: 0;
-    bottom: 7vh;
+    bottom: 6vw;
     width: 90vw;
     margin: 0 1vw 0 1vw;
 }
@@ -61,7 +63,7 @@
     position: absolute;
     height: 100vh;
     left: 0;
-    bottom: 12vh;
+    bottom: 9vw;
     -webkit-mask-image: -webkit-gradient(linear, left bottom, right top, from(rgba(0,0,0,0.7)), to(rgba(0,0,0,0)));
     display: flex;
     flex-direction: column;

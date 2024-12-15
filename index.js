@@ -27,7 +27,7 @@ app.use(
 app.use(cors());
 app.use(function (req, res, next) {
     site_url = "https://" + req.get("host");
-    //res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Origin", site_url);
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Headers", "Content-Type");
@@ -91,7 +91,7 @@ io.on("connection", async (socket) => {
     var user = null;
     var disconnected = false;
     socket.on("join", async (data) => {
-        if (disconnected) return;
+        if (user || disconnected) return;
 
         users[socket.id] = {
             id: socket.id,
@@ -139,7 +139,7 @@ io.on("connection", async (socket) => {
         user.y = data.y ?? user.y;
 
         points[now] = [user.x, user.y, data.color ?? null, data.width ?? 5];
-        io.emit("cursor", { // send to all users but self
+        io.emit("cursor", {
             user: user,
             color: data.color ?? null,
             width: data.width ?? 5,
@@ -147,17 +147,17 @@ io.on("connection", async (socket) => {
     });
 
     socket.on("chat", async (message) => {
-        if (!message) return;
+        if (!user || !message) return;
 
         io.emit("chat", {
             user: user,
             message: message.substring(0, max_chat)
-        })
+        });
     });
 
     socket.on("disconnect", async () => {
-        socket.broadcast.emit("userLeft", socket.id);
         delete users[socket.id];
         disconnected = true;
+        io.emit("userLeft", socket.id);
     });
 });
