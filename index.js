@@ -81,17 +81,17 @@ server.listen(PORT, async () => {
 });
 
 
-
 const users = {};
-const points = {};
-const update_time = 50;
+const points = {}; // This will now store points for each user separately
+const update_time = 20;
 const max_name = 24;
 const max_chat = 256;
+
 io.on("connection", async (socket) => {
     console.log(`${socket.id} connected to socket.`);
     var user = null;
     var disconnected = false;
-    
+
     socket.on("join", async (data) => {
         if (user || disconnected) return;
 
@@ -104,6 +104,7 @@ io.on("connection", async (socket) => {
         };
         user = users[socket.id];
 
+        // Ensure unique usernames
         if (Object.values(users).find(u => u.username == user.username && u.id != user.id)) {
             let i = 0;
             do {
@@ -111,7 +112,10 @@ io.on("connection", async (socket) => {
             } while (Object.values(users).find(u => u.username == data.username + i && u.id != user.id));
             user.username = data.username + i;
         }
-    
+
+        // Initialize user with their points
+        points[socket.id] = []; // Initialize an empty array for this user's points
+
         socket.emit("init", {
             users: users,
             points: points
@@ -140,11 +144,15 @@ io.on("connection", async (socket) => {
         user.x = data.x ?? user.x;
         user.y = data.y ?? user.y;
 
-        points[now] = [user.x, user.y, data.color ?? null, data.width ?? 5];
+        // Store points for the specific user
+        points[socket.id].push([user.x, user.y, data.color ?? null, data.width ?? 5]);
+
+        // Emit the cursor position along with user ID
         io.emit("cursor", {
             user: user,
             color: data.color ?? null,
             width: data.width ?? 5,
+            points: points[socket.id] // Send only this user's points
         });
     });
 
