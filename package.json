@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "node -r dotenv/config index.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-session": "^2.1.0",
